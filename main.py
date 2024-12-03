@@ -3,10 +3,8 @@ import json
 from wxhook import Bot, events
 from wxhook.model import Event
 
-import constans
-from event.event_enum import EventType
-from game import session, global_session, rpg_payload
-from handler.handler import event_handlers
+from config import constans
+from rpg_game import game_util, game_session, rpg_payload
 
 MAPLE_WX_ID = constans.ADMIN_WE_CHAT_ID
 
@@ -42,12 +40,12 @@ def on_before_message(wx_bot: Bot, event: Event):
 
 def on_after_message(wx_bot: Bot, event: Event):
     pass
-    # handler = event_handlers.get(event.type)
-    # if handler:
-    #     handler(wx_bot, event)
+    # wx_msg_handler = event_handlers.get(wx_event.type)
+    # if wx_msg_handler:
+    #     wx_msg_handler(wx_bot, wx_event)
     # else:
-    #     print(f"No handler for event type: {event.type}")
-    # wx_bot.send_text(MAPLE_WX_ID, event.content)
+    #     print(f"No wx_msg_handler for wx_event type: {wx_event.type}")
+    # wx_bot.send_text(MAPLE_WX_ID, wx_event.content)
     # print(f"消息事件发送到 {MAPLE_WX_ID} 之后")
 
 
@@ -67,20 +65,20 @@ bot = Bot(
 def on_message(wx_bot: Bot, event: Event):
     if event.content == '开始游戏':
         wechat_user_id = event.toUser
-        user_session_id = global_session.get_or_create_value(wechat_user_id)
+        user_session_id = game_session.get_user_session_id(wechat_user_id)
         # 这里也可以做成全局缓存，由于to base64的结果一致性，能用就行
-        payload = rpg_payload.make_payload(wechat_user_id)
-        result = session.start_game('GN7MZCKCJ', user_session_id, payload)
+        payload = rpg_payload.generate_rpg_payload(wechat_user_id)
+        result = game_util.start_game('GN7MZCKCJ', user_session_id, payload)
         response_object = json.loads(result)
 
-        wx_bot.send_text(constans.ADMIN_WE_CHAT_ID, session.format_game_data(response_object))
+        wx_bot.send_text(constans.ADMIN_WE_CHAT_ID, game_util.format_game_data(response_object))
         wx_bot.send_text(constans.ADMIN_WE_CHAT_ID,
-                         session.format_chapter_info(response_object.get('data', {}).get('chapter', {})))
-        wx_bot.send_text(constans.ADMIN_WE_CHAT_ID, session.format_for_wechat(
+                         game_util.format_chapter_info(response_object.get('data', {}).get('chapter', {})))
+        wx_bot.send_text(constans.ADMIN_WE_CHAT_ID, game_util.format_for_wechat(
             response_object.get('data', {}).get('chapter', {}).get('init_dialog', [])))
     elif event.content == '结束游戏':
         wechat_user_id = event.toUser
-        global_session.del_value(wechat_user_id)
+        game_session.remove_user_session_id(wechat_user_id)
 
     wx_bot.send_text(constans.ADMIN_WE_CHAT_ID, event.content)
 

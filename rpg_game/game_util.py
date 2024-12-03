@@ -1,21 +1,19 @@
 import http.client
 import json
 
+from config import constans
 
-# requestBody = json.dumps({
-#    "game_id": "GN7MZCKCJ",
-#    "session_id": "1sOjgGg7AGtHPGmRlZxyI1"
-# })
-def start_game(game_id, session_id, payload_encoded):
+
+def start_game(game_id, session_id, request_header_payload):
     """
         启动游戏会话的函数。
 
         :param game_id: 游戏ID
         :param session_id: 会话ID
-        :param payload_encoded: Base64编码的payload字符串
+        :param request_header_payload: Base64编码的payload字符串
         :return: 服务器响应的内容
         """
-    conn = http.client.HTTPSConnection("backend-pro-qavdnvfe5a-uc.a.run.app")
+    conn = http.client.HTTPSConnection(constans.RPG_GO_BACKEND_URL)
 
     # 创建请求体的payload
     request_body = json.dumps({
@@ -25,17 +23,17 @@ def start_game(game_id, session_id, payload_encoded):
 
     # 创建请求头
     headers = {
-        'Authorization': 'Bearer 8BD6476DAD6668CC9F5AE65435D54D2515723F3858F9BE8BBC2EDA89714C64A2',
-        'payload': payload_encoded,
+        'Authorization': constans.RPG_GO_BACKEND_AUTH_TOKEN,
+        'payload': request_header_payload,
         'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
         'Content-Type': 'application/json',
         'Accept': '*/*',
-        'Host': 'backend-pro-qavdnvfe5a-uc.a.run.app',
+        'Host': constans.RPG_GO_BACKEND_URL,
         'Connection': 'keep-alive'
     }
 
     # 发送POST请求
-    conn.request("POST", "/open/game/startgame", request_body, headers)
+    conn.request("POST", constans.RPG_GO_START_GAME_URI, request_body, headers)
 
     # 获取响应
     res = conn.getresponse()
@@ -94,34 +92,6 @@ def format_chapter_info(chapter_data):
 
     # 将列表中的所有字符串用换行符连接
     return '\n'.join(formatted_lines) + '\n'
-
-
-# # 示例用法
-# json_response = """
-# {
-#     "code": 0,
-#     "msg": "ok",
-#     "data": {
-#         "chapter": {
-#             "name": "🏚️Chapter I Enter the Domain🕸️",
-#             "chapter_id": "EH3Hi-X8k",
-#             "background": "```\\nIt's Halloween night 🎃, You are Julia Morrison, and ...\\n```"
-#         }
-#     }
-# }
-# """
-#
-# # 将JSON字符串解析为Python字典
-# response_object = json.loads(json_response)
-#
-# # 提取章节信息
-# chapter_data = response_object.get('data', {}).get('chapter', {})
-#
-# # 使用函数格式化章节信息
-# formatted_chapter_info = format_chapter_info(chapter_data)
-# print(formatted_chapter_info)
-
-import json
 
 
 def format_init_dialog(dialogs):

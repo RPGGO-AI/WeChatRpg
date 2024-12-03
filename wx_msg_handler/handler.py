@@ -1,8 +1,9 @@
 from wxhook import Bot
 from wxhook.model import Event
 
-import constans
-from event.event_enum import EventType
+from config import constans
+from wx_event.event_enum import EventType
+
 
 def handle_text_message(wx_bot: Bot, event: Event):
     wx_bot.send_text(constans.ADMIN_WE_CHAT_ID, f"Text: {event.content}")
@@ -24,4 +25,3 @@ event_handlers = {
     EventType.IMAGE_MESSAGE: handle_image_message,
     EventType.VOICE_MESSAGE: handle_voice_message,
 }
-

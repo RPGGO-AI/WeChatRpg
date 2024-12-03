@@ -2,8 +2,6 @@ from enum import Enum, unique
 
 
 # 取自\wxhook\events.py
-
-# 使用@unique装饰器来确保不重复的枚举成员
 @unique
 class EventType(Enum):
     NOTICE_MESSAGE = 10000  # 通知消息事件
@@ -22,18 +20,18 @@ class EventType(Enum):
     PHONE_MESSAGE = 51  # 手机端同步消息事件
 
     @classmethod
-    def from_value(cls, value):
+    def from_value(cls, v):
         # 提供一个方法来从值获取枚举成员
         for member in cls:
-            if member.value == value:
+            if member.value == v:
                 return member
-        raise ValueError(f"No matching EventType for value: {value}")
+        raise ValueError(f"No matching EventType for value: {v}")
 
 
 # 示例：如何从值获取事件类型
-value = 1
-try:
-    event_type = EventType.from_value(value)
-    print(f"匹配的事件是：{event_type.name}")
-except ValueError as e:
-    print(e)
+# value = 1
+# try:
+#     event_type = EventType.from_value(value)
+#     print(f"匹配的事件是：{event_type.name}")
+# except ValueError as e:
+#     print(e)
