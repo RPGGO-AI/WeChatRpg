@@ -29,5 +29,6 @@ python main.py
 https://github.com/tom-snow/wechat-windows-versions/releases/download/v3.9.5.81/WeChatSetup-3.9.5.81.exe
 ```
 
-测试图，目前仅限于开始游戏
+测试图，目前仅限于开始游戏：
+
 ![test_img/img.png](test_img/img.png)
