@@ -23,3 +23,5 @@ python main.py
 https://github.com/tom-snow/wechat-windows-versions/releases
 ```
 
+测试图，目前仅限于开始游戏
+![test_img/img.png](test_img/img.png)
