@@ -146,39 +146,25 @@ def format_init_dialog(dialogs):
     return '\n'.join(formatted_dialogs) + '\n'
 
 
-# # 示例用法
-# json_response = """
-# {
-#     "code": 0,
-#     "msg": "ok",
-#     "data": {
-#         "chapter": {
-#             "init_dialog": [
-#                 {
-#                     "character_id": "C5ET0HPXJ",
-#                     "message": "Welcome to our haunted house!",
-#                     "name": "The Manor Incarnate"
-#                 },
-#                 {
-#                     "character_id": "CC51FWYKS",
-#                     "message": "*Max \"Ghostbuster\" Thompson steps up.*",
-#                     "name": "Max \"Ghostbuster\" Thompson"
-#                 },
-#                 {
-#                     "character_id": "CPWQ5EFQB",
-#                     "message": "*Olivia \"Witchling\" Alvarez draws herself up with all the poise.*",
-#                     "name": "Olivia \"Witchling\" Alvarez"
-#                 }
-#             ]
-#         }
-#     }
-# }
-# """
-#
-# response_object = json.loads(json_response)
-#
-# # 提取初始对话信息
-# init_dialogs = response_object.get('data', {}).get('chapter', {}).get('init_dialog', [])
-#
-# formatted_init_dialogs = format_init_dialog(init_dialogs)
-# print(formatted_init_dialogs)
+def format_for_wechat(dialogs):
+    """
+    格式化对话文本为微信聊天卡片风格。实际也一般
+
+    :param dialogs: 列表，每个元素是一个包含character_id, message和name的字典
+    :return: 格式化后的字符串
+    """
+    formatted_texts = []
+
+    for dialog in dialogs:
+        character_id = dialog.get('character_id', '未知ID')
+        message = dialog.get('message', '')
+        name = dialog.get('name', '未知角色')
+
+        # 将Markdown中的强调符号替换成全角符或其他符号来增强显著性
+        formatted_message = message.replace('*', '').replace('`', '')
+
+        # 格式化成聊天卡片样式
+        formatted_text = f"【{name}({character_id})】说:\n{formatted_message}"
+        formatted_texts.append(formatted_text)
+
+    return '\n\n'.join(formatted_texts)

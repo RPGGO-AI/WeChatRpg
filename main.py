@@ -76,7 +76,7 @@ def on_message(wx_bot: Bot, event: Event):
         wx_bot.send_text(constans.ADMIN_WE_CHAT_ID, session.format_game_data(response_object))
         wx_bot.send_text(constans.ADMIN_WE_CHAT_ID,
                          session.format_chapter_info(response_object.get('data', {}).get('chapter', {})))
-        wx_bot.send_text(constans.ADMIN_WE_CHAT_ID, session.format_init_dialog(
+        wx_bot.send_text(constans.ADMIN_WE_CHAT_ID, session.format_for_wechat(
             response_object.get('data', {}).get('chapter', {}).get('init_dialog', [])))
     elif event.content == '结束游戏':
         wechat_user_id = event.toUser
