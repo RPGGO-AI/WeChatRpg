@@ -1,0 +1,1 @@
+ADMIN_WE_CHAT_ID = 'wxid_tmiew55xuxb522'
