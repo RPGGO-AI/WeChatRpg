@@ -129,12 +129,13 @@ def format_for_wechat(dialogs):
         character_id = dialog.get('character_id', '未知ID')
         message = dialog.get('message', '')
         name = dialog.get('name', '未知角色')
-
+        if name == '':
+            name = '未知角色'
         # 将Markdown中的强调符号替换成全角符或其他符号来增强显著性
         formatted_message = message.replace('*', '').replace('`', '')
 
         # 格式化成聊天卡片样式
-        formatted_text = f"【{name}({character_id})】说:\n{formatted_message}"
+        formatted_text = f"【{name}】({character_id}) 说:\n{formatted_message}"
         formatted_texts.append(formatted_text)
 
     return '\n\n'.join(formatted_texts)
